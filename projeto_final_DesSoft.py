@@ -66,5 +66,23 @@ class Player2(pygame.sprite.Sprite):
            self.rect.right = WIDTH
        if self.rect.left < 0:
            self.rect.left = 0
-#cria os muros destruiveis
+#cria os muros destruivel
+class Mob(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        mob_img = pygame.image.load(path.join(img_dir, ".png")).convert()#Colocar imagem do muro
+        self.image = pygame.transform.scale(mob_img, (50, 38))
+        self.image.set_colorkey(BLACK)
+"""       Arrumar
+        # Sorteia um lugar inicial em x
+        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        # Sorteia um lugar inicial em y
+        self.rect.y = random.randrange(-100, -40)
+        # Sorteia uma velocidade inicial
+        self.speedx = random.randrange(-3, 3)
+        self.speedy = random.randrange(2, 9)
+ """       
+        self.radius = int(self.rect.width * .85 / 2)
+        
+
            
