@@ -1,0 +1,22 @@
+Features para o Projeto final de DesSoft:
+-----------------------------------------
+1-Buffs:
+--------
+	-Aumento do Range da explosão
+	-Aumento da Vida
+	-Aumento da mov.speed(montaria)
+	-Vida extra/escudo
+	-Super Bomba
+2-Debuffs:
+----------
+	-Dimuir a mov.speed
+	-ficar sem por bombas no campo por um tempo
+	-andar sem ruma 
+	-inverter os comados de movimentação
+3-Teleporte:
+------------
+	-teleportar o jogador
+	-teleportar a bomba
+4-Chutar a bomba
+5-Persongens selecionaveis
+
