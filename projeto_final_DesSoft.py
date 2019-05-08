@@ -81,8 +81,34 @@ class Mob(pygame.sprite.Sprite):
         # Sorteia uma velocidade inicial
         self.speedx = random.randrange(-3, 3)
         self.speedy = random.randrange(2, 9)
- """       
-        self.radius = int(self.rect.width * .85 / 2)
+        self.radius = int(self.rect.width * .85 / 2)#ajustar o tamanho dos mobs"""
+    #atualiza a posição do jogador   
+     def update(self):
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        
+class Bomb(pygame.sprite.Sprite):
+    
+    # Construtor da classe.
+    def __init__(self, x, y):
+        
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+        
+        # Carregando a imagem de fundo.
+        bomb_img = pygame.image.load(path.join(img_dir, "")).convert()#colocar a imagem da bomba
+        self.image = bomb_img
+        
+        # Deixando transparente.
+        self.image.set_colorkey(BLACK)
+        
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+        
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.bottom = position1
+        self.rect.centerx = x
+        self.speedy = -10
         
 
            
