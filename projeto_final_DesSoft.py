@@ -124,7 +124,7 @@ class Bomb1(pygame.sprite.Sprite):
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
-        # Carregando a imagem de fundo.
+        # Carregando a imagem da bomba.
         bomb_img = pygame.image.load(path.join(img_dir, "Bomb1.png")).convert()#colocar a imagem da bomba
         self.image=bomb_img
         self.image = bomb_img
@@ -146,65 +146,57 @@ class Bomb1(pygame.sprite.Sprite):
 class Explosion(pygame.sprite.Sprite):
 
     # Construtor da classe.
-    def __init__(self, center, explosion_anim):
+    def __init__(self, center, size):
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
         # Carrega a animação de explosão
+        explosion_images=[]
+        explosion_list=['Explosion-1.png','Explosion-2.png','Explosion-3.png','Explosion-4.png',
+                  'Explosion-5.png','Explosion-6.png','Explosion-7.png','Explosion-8.png','Explosion-9.png',
+                  'Explosion-10.png','Explosion-11.png','Explosion-12.png','Explosion-13.png','Explosion-14.png']
+        for img in explosion_list:
+            explosion_images.append(pygame.image.load(path.join(img_dir, img)).convrert())
+        explosion_anim={}
+        explosion_anim['lg']=[]
+        explosion_anim['sm']=[]
+        for i in range(13):
+            filename='Explosion0.png'.format(i)
+            img=pygame.image.load(path.join(img_dir, filename)).vconvert()
+            img.set_colorkey(BLACK)
+            img_lg= pygame.transform.scale(img,(32,32))#tamanho da imagem da explosão
+            explosion_anim['lg'].append(img_lg)
+            img_sm=pygame.transform.scale(img,(16,16))#tamanho da imagem da explosão
+            explosion_anim['sm'].append(img_sm)
         self.explosion_anim = explosion_anim
-
+        self.size=size
+        self.image=explosion_anim[self.size][0]
+        self.rect=self.image.get_rect()
+        self.rect.center= center
+        self.frame=0
+        self.last_update= pygame.time.get_ticks()
+        self.frame_rate=60
         # Inicia o processo de animação colocando a primeira imagem na tela.
         self.frame = 0
         self.image = self.explosion_anim[self.frame]
         self.rect = self.image.get_rect()
-        self.rect.center = center
-
+       
         # Guarda o tick da primeira imagem
         self.last_update = pygame.time.get_ticks()
-
-        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
-        self.frame_ticks = 50
 
     def update(self):
         # Verifica o tick atual.
         now = pygame.time.get_ticks()
-
-        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
-        elapsed_ticks = now - self.last_update
-
-        # Se já está na hora de mudar de imagem...
-        if elapsed_ticks > self.frame_ticks:
-
-            # Marca o tick da nova imagem.
-            self.last_update = now
-
-            # Avança um quadro.
-            self.frame += 1
-
-            # Verifica se já chegou no final da animação.
-            if self.frame == len(self.explosion_anim):
-                # Se sim, tchau explosão!
+        if now -self.last_update>self.frame_rate:
+            self.last_update= now
+            self.frame+=1
+            if self.frame== len(explosion_anim[self.size]):
                 self.kill()
             else:
-                # Se ainda não chegou ao fim da explosão, troca de imagem.
-                center = self.rect.center
-                self.image = self.explosion_anim[self.frame]
-                self.rect = self.image.get_rect()
-                self.rect.center = center        
-#-----------------------------------------------------------------------------       
-#testar o jogo e checar se é necessario uma função de bomba para cada jogador
-#-----------------------------------------------------------------------------
-
-    # Metodo que atualiza a posição da navinha
-    def update(self):
-        self.rect.y += self.speedy 
-
-#criando a explosãp da bomba
-
-
-            
-        
-        
+                center=self.rect.center
+                self.image= explosion_anim[self.size][self.frame]
+                self.rect= self.image_rect()
+                self.rect.center= center
 # Inicialização do Pygame.
 pygame.init()
 pygame.mixer.init()
@@ -232,6 +224,12 @@ pew_sound = pygame.mixer.Sound(path.join(snd_dir, 'pew.wav'))#arrumar som'''
 # Cria uma nave. O construtor será chamado automaticamente.
 player1 = Player1()
 player2=Player2()
+
+#carrega as explosões da bomba
+#exp=Explosion()
+
+#cria um grupo para as explosões 
+explosion= pygame.sprite.Group()
 
 # Cria um grupo de todos os sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
@@ -295,12 +293,19 @@ try:
                     bomb = Bomb1(player1.rect.centerx, player1.rect.top)
                     all_sprites.add(bomb)
                     bombs.add(bomb)
+                    explosion=Explosion(player1.rect.centerx, player1.rect.top)
+                    all_sprites.add(explosion)
+                    exp.add(explosion)
                     '''
                     pew_sound.play()'''
                 if event.key == pygame.K_e:
                     bomb = Bomb1(player2.rect.centerx, player2.rect.top)
+                    exp=Explosion()
                     all_sprites.add(bomb)
                     bombs.add(bomb)
+                    explosion=Explosion(player2.rect.centerx, player2.rect.top)
+                    all_sprites.add(explosion)
+                    exp.add(explosion)
                     '''
                     pew_sound.play()'''
             # Verifica se soltou alguma tecla.
