@@ -41,8 +41,11 @@ class Player1(pygame.sprite.Sprite):
         self.speedx=0
         self.speedy=0
         self.radius=10
+        '''self.shoot_delay= 500
+        self.last_shoot= pygame.time.get_ticks()'''
         
     def update(self):
+        '''keystate=pygame.key.get_pressed()'''
         self.rect.y+=self.speedy
         self.rect.x += self.speedx
         if self.rect.right > WIDTH:
@@ -53,6 +56,10 @@ class Player1(pygame.sprite.Sprite):
             self.rect.bottom=HEIGHT
         if self.rect.top <0 :
             self.rect.top=0
+        '''
+        if keystate[pygame.K_SPACE]:
+            self.shoot()'''
+       
 class Player2(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -66,8 +73,11 @@ class Player2(pygame.sprite.Sprite):
         self.speedx=0
         self.speedy=0
         self.radius=10
+        ''''self.shoot_delay= 500
+        self.last_shoot= pygame.time.get_ticks()'''
         
     def update(self):
+        '''keystate=pygame.key.get_pressed()'''
         self.rect.y+=self.speedy
         self.rect.x += self.speedx
         if self.rect.right > WIDTH:
@@ -78,6 +88,9 @@ class Player2(pygame.sprite.Sprite):
             self.rect.bottom=HEIGHT
         if self.rect.top <0 :
             self.rect.top=0
+        '''if keystate[pygame.K_SPACE]:
+            self.shoot()'''
+            
 #cria os muros destruivel
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
@@ -127,13 +140,15 @@ class Bomb1(pygame.sprite.Sprite):
         self.rect.bottom = y
         self.rect.centerx = x
         self.speedy = 0
-#-----------------------------------------------------------------------------       
-#testar o jogo e checar se é necessario uma função de bomba para cada jogador
-#-----------------------------------------------------------------------------
+        
     # Metodo que atualiza a posição da navinha
     def update(self):
         self.rect.y += self.speedy 
-        
+
+#criando a explosãp da bomba
+
+
+            
         
         
 # Inicialização do Pygame.
@@ -219,6 +234,7 @@ try:
                     player2.speedx=-8
                 if event.key==pygame.K_d:
                     player2.speedx=8
+                
                         
                 # Se for um espaço atira!
                 if event.key == pygame.K_SPACE:
