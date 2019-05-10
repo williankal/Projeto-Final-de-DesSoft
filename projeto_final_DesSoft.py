@@ -95,7 +95,7 @@ class Player2(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        mob_img = pygame.image.load(path.join(img_dir, "exp1.jpg")).convert()#Colocar imagem do muro
+        mob_img = pygame.image.load(path.join(img_dir, "bomb1.png")).convert()#Colocar imagem do muro
         self.image = pygame.transform.scale(mob_img, (50, 38))
         self.image.set_colorkey(BLACK)
         #---------------------------------------------------------------Arrumar
@@ -140,7 +140,61 @@ class Bomb1(pygame.sprite.Sprite):
         self.rect.bottom = y
         self.rect.centerx = x
         self.speedy = 0
-        
+
+
+# Classe que representa uma explosão de meteoro
+class Explosion(pygame.sprite.Sprite):
+
+    # Construtor da classe.
+    def __init__(self, center, explosion_anim):
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Carrega a animação de explosão
+        self.explosion_anim = explosion_anim
+
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0
+        self.image = self.explosion_anim[self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+
+        # Guarda o tick da primeira imagem
+        self.last_update = pygame.time.get_ticks()
+
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        self.frame_ticks = 50
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks:
+
+            # Marca o tick da nova imagem.
+            self.last_update = now
+
+            # Avança um quadro.
+            self.frame += 1
+
+            # Verifica se já chegou no final da animação.
+            if self.frame == len(self.explosion_anim):
+                # Se sim, tchau explosão!
+                self.kill()
+            else:
+                # Se ainda não chegou ao fim da explosão, troca de imagem.
+                center = self.rect.center
+                self.image = self.explosion_anim[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center        
+#-----------------------------------------------------------------------------       
+#testar o jogo e checar se é necessario uma função de bomba para cada jogador
+#-----------------------------------------------------------------------------
+
     # Metodo que atualiza a posição da navinha
     def update(self):
         self.rect.y += self.speedy 
