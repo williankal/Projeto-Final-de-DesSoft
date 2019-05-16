@@ -9,6 +9,7 @@ import pygame
 import time
 from os import path
 import random
+import numpy as np
 
 #estabelecendo a pasta com as figuras e sons
 img_dir=path.join(path.dirname(__file__),'img')
@@ -179,11 +180,10 @@ class Bomb1(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem da bomba.
-        bomb_img = pygame.image.load(path.join(img_dir, "Bomb1.png")).convert()#colocar a imagem da bomba
+        bomb_img = pygame.image.load(path.join(img_dir, "bomb1.png")).convert()#colocar a imagem da bomba
         self.image=bomb_img
         self.image = bomb_img
         self.image=pygame.transform.scale(bomb_img,(15,14))
-        
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
         
@@ -196,13 +196,8 @@ class Bomb1(pygame.sprite.Sprite):
         self.speedy = 0
 
 # Classe que representa uma explosão de meteoro
-class Explosion(pygame.sprite.Sprite):
 
-    # Construtor da classe.
-    def __init__(self, center, size):
-        # Construtor da classe pai (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
+<<<<<<< HEAD
         # Carrega a animação de explosão
         explosion_images=[]
         explosion_list=['Explosion-1.png','Explosion-2.png','Explosion-3.png','Explosion-4.png',
@@ -289,6 +284,9 @@ def game_screen(screen):
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
+=======
+# Inicialização do Pygame.
+>>>>>>> 93d98ab90876597280e589655f412d15681cfd28
 pygame.init()
 pygame.mixer.init()
 
@@ -316,7 +314,7 @@ player1 = Player1()
 player2=Player2()
 
 #carrega as explosões da bomba
-#exp=Explosion()
+exp=pygame.sprite.Group()
 
 #cria um grupo para as explosões 
 explosion= pygame.sprite.Group()
@@ -383,19 +381,14 @@ try:
                     bomb = Bomb1(player1.rect.centerx, player1.rect.top)
                     all_sprites.add(bomb)
                     bombs.add(bomb)
-                    explosion=Explosion(player1.rect.centerx, player1.rect.top)
-                    all_sprites.add(explosion)
-                    exp.add(explosion)
+                   
                     '''
                     pew_sound.play()'''
                 if event.key == pygame.K_e:
                     bomb = Bomb1(player2.rect.centerx, player2.rect.top)
-                    exp=Explosion()
                     all_sprites.add(bomb)
                     bombs.add(bomb)
-                    explosion=Explosion(player2.rect.centerx, player2.rect.top)
-                    all_sprites.add(explosion)
-                    exp.add(explosion)
+            
                     '''
                     pew_sound.play()'''
             # Verifica se soltou alguma tecla.
