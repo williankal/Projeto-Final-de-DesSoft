@@ -32,9 +32,9 @@ YELLOW = (255, 255, 0)
 class Player1(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        player_img=pygame.image.load(path.join(img_dir,'bomb1.png')).convert()#colocar o nome da imagem do jogador
+        player_img=pygame.image.load(path.join(img_dir,'Explosion-1.png')).convert()#colocar o nome da imagem do jogador
         self.image=player_img
-        self.image=pygame.transform.scale(player_img,(15,14))
+        self.image=pygame.transform.scale(player_img,(150,140))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = (WIDTH)-15
@@ -64,9 +64,9 @@ class Player1(pygame.sprite.Sprite):
 class Player2(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        player_img=pygame.image.load(path.join(img_dir,'bomb1.png')).convert()#colocar o nome da imagem do jogador
+        player_img=pygame.image.load(path.join(img_dir,'Explosion-1.png')).convert()#colocar o nome da imagem do jogador
         self.image=player_img
-        self.image=pygame.transform.scale(player_img,(15,14))
+        self.image=pygame.transform.scale(player_img,(150,140))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = 0
@@ -126,10 +126,10 @@ class Bomb1(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem da bomba.
-        bomb_img = pygame.image.load(path.join(img_dir, "bomb1.png")).convert()#colocar a imagem da bomba
+        bomb_img = pygame.image.load(path.join(img_dir, "Bomb1.png")).convert()#colocar a imagem da bomba
         self.image=bomb_img
         self.image = bomb_img
-        self.image=pygame.transform.scale(bomb_img,(15,14))
+        self.image=pygame.transform.scale(bomb_img,(50,50))
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
         
