@@ -16,9 +16,11 @@ img_dir=path.join(path.dirname(__file__),'img')
 snd_dir=path.join(path.dirname(__file__),'snd')
 
 #definindo o tamanho da tela
-WIDTH=600
-HEIGHT=480
+TITULO='BOMBERMAN'
+WIDTH=520
+HEIGHT= 360
 FPS=60 
+TILE_SIZE = 40 
 
 #definindo as cores
 WHITE = (255, 255, 255)
@@ -27,6 +29,58 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
+
+#tipos de tile
+GRASS=0
+WALL=1
+WALL_DESTROYABLE=2
+
+
+#Mapa
+MAP=[
+    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS],
+    [GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS],
+    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS],
+    [GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS],
+    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS], 
+    [GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS],
+    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS],
+    [GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS],
+    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS],
+]
+#Dados do jogador
+STILL=0
+WALKING=1
+
+# Classe Jogador que representa o herói
+class Tile(pygame.sprite.Sprite):
+
+    # Construtor da classe.
+    def __init__(self, tile_img, row, column):
+
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Aumenta o tamanho do tile.
+        tile_img = pygame.transform.scale(tile_img, (TILE_SIZE, TILE_SIZE))
+
+        # Define a imagem do tile.
+        self.image = tile_img
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+
+        # Posiciona o tile
+        self.rect.x = TILE_SIZE * column
+        self.rect.y = TILE_SIZE * row
+        
+def load_assets(img_dir):
+    assets = {}
+    assets[GRASS] = pygame.image.load(path.join(img_dir, 'grass.png')).convert()
+    assets[WALL] = pygame.image.load(path.join(img_dir, 'wall.png')).convert()
+   
+    return assets
+
+
 
 #criando o player 1
 class Player1(pygame.sprite.Sprite):
@@ -92,7 +146,7 @@ class Player2(pygame.sprite.Sprite):
         '''if keystate[pygame.K_SPACE]:
             self.shoot()'''
             
-#cria os muros destruivel
+#cria os     s destruivel
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -141,10 +195,98 @@ class Bomb1(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.speedy = 0
 
-
 # Classe que representa uma explosão de meteoro
 
+<<<<<<< HEAD
+        # Carrega a animação de explosão
+        explosion_images=[]
+        explosion_list=['Explosion-1.png','Explosion-2.png','Explosion-3.png','Explosion-4.png',
+                  'Explosion-5.png','Explosion-6.png','Explosion-7.png','Explosion-8.png','Explosion-9.png',
+                  'Explosion-10.png','Explosion-11.png','Explosion-12.png','Explosion-13.png','Explosion-14.png']
+        for img in explosion_list:
+            explosion_images.append(pygame.image.load(path.join(img_dir, img)).convrert())
+        explosion_anim={}
+        explosion_anim['lg']=[]
+        explosion_anim['sm']=[]
+        for i in range(13):
+            filename='Explosion0.png'.format(i)
+            img=pygame.image.load(path.join(img_dir, filename)).vconvert()
+            img.set_colorkey(BLACK)
+            img_lg= pygame.transform.scale(img,(32,32))#tamanho da imagem da explosão
+            explosion_anim['lg'].append(img_lg)
+            img_sm=pygame.transform.scale(img,(16,16))#tamanho da imagem da explosão
+            explosion_anim['sm'].append(img_sm)
+        self.explosion_anim = explosion_anim
+        self.size=size
+        self.image=explosion_anim[self.size][0]
+        self.rect=self.image.get_rect()
+        self.rect.center= center
+        self.frame=0
+        self.last_update= pygame.time.get_ticks()
+        self.frame_rate=60
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0
+        self.image = self.explosion_anim[self.frame]
+        self.rect = self.image.get_rect()
+       
+        # Guarda o tick da primeira imagem
+        self.last_update = pygame.time.get_ticks()
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+        if now -self.last_update>self.frame_rate:
+            self.last_update= now
+            self.frame+=1
+            if self.frame== len(explosion_anim[self.size]):
+                self.kill()
+            else:
+                center=self.rect.center
+                self.image= explosion_anim[self.size][self.frame]
+                self.rect= self.image_rect()
+                self.rect.center= center
+def game_screen(screen):
+    # Variável para o ajuste de velocidade
+    clock = pygame.time.Clock()
+
+    # Carrega assets
+    assets = load_assets(img_dir)
+
+    # Cria um grupo de tiles.
+    tiles = pygame.sprite.Group()
+    # Cria tiles de acordo com o mapa
+    for row in range(len(MAP)):
+        for column in range(len(MAP[row])):
+            tile_type = MAP[row][column]
+            tile = Tile(assets[tile_type], row, column)
+            tiles.add(tile)
+
+    PLAYING = 0
+    DONE = 1
+
+    state = PLAYING
+    while state != DONE:
+
+        # Ajusta a velocidade do jogo.
+        clock.tick(FPS)
+
+        # Processa os eventos (mouse, teclado, botão, etc).
+        for event in pygame.event.get():
+
+            # Verifica se foi fechado.
+            if event.type == pygame.QUIT:
+                state = DONE
+
+        # A cada loop, redesenha o fundo e os sprites
+        screen.fill(BLACK)
+        tiles.draw(screen)
+
+        # Depois de desenhar tudo, inverte o display.
+        pygame.display.flip()
+
+=======
 # Inicialização do Pygame.
+>>>>>>> 93d98ab90876597280e589655f412d15681cfd28
 pygame.init()
 pygame.mixer.init()
 
@@ -152,15 +294,14 @@ pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Nome do jogo
-pygame.display.set_caption("Bomberman")
+pygame.display.set_caption(TITULO)
 
-# Variável para o ajuste de velocidade
-clock = pygame.time.Clock()
 
-# Carrega o fundo do jogo
-background = pygame.image.load(path.join(img_dir, 'campo.png')).convert()#colocar o mapa do jogo
-background_rect = background.get_rect()
-
+# Comando para evitar travamentos.
+try:
+    game_screen(screen)
+finally:
+    pygame.quit()
 # Carrega os sons do jogo
 '''pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))#colocar os sons
 pygame.mixer.music.set_volume(0.4)
