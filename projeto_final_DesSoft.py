@@ -197,54 +197,9 @@ class Bomb1(pygame.sprite.Sprite):
 
 # Classe que representa uma explosão de meteoro
 
-<<<<<<< HEAD
-        # Carrega a animação de explosão
-        explosion_images=[]
-        explosion_list=['Explosion-1.png','Explosion-2.png','Explosion-3.png','Explosion-4.png',
-                  'Explosion-5.png','Explosion-6.png','Explosion-7.png','Explosion-8.png','Explosion-9.png',
-                  'Explosion-10.png','Explosion-11.png','Explosion-12.png','Explosion-13.png','Explosion-14.png']
-        for img in explosion_list:
-            explosion_images.append(pygame.image.load(path.join(img_dir, img)).convrert())
-        explosion_anim={}
-        explosion_anim['lg']=[]
-        explosion_anim['sm']=[]
-        for i in range(13):
-            filename='Explosion0.png'.format(i)
-            img=pygame.image.load(path.join(img_dir, filename)).vconvert()
-            img.set_colorkey(BLACK)
-            img_lg= pygame.transform.scale(img,(32,32))#tamanho da imagem da explosão
-            explosion_anim['lg'].append(img_lg)
-            img_sm=pygame.transform.scale(img,(16,16))#tamanho da imagem da explosão
-            explosion_anim['sm'].append(img_sm)
-        self.explosion_anim = explosion_anim
-        self.size=size
-        self.image=explosion_anim[self.size][0]
-        self.rect=self.image.get_rect()
-        self.rect.center= center
-        self.frame=0
-        self.last_update= pygame.time.get_ticks()
-        self.frame_rate=60
-        # Inicia o processo de animação colocando a primeira imagem na tela.
-        self.frame = 0
-        self.image = self.explosion_anim[self.frame]
-        self.rect = self.image.get_rect()
-       
-        # Guarda o tick da primeira imagem
-        self.last_update = pygame.time.get_ticks()
 
-    def update(self):
-        # Verifica o tick atual.
-        now = pygame.time.get_ticks()
-        if now -self.last_update>self.frame_rate:
-            self.last_update= now
-            self.frame+=1
-            if self.frame== len(explosion_anim[self.size]):
-                self.kill()
-            else:
-                center=self.rect.center
-                self.image= explosion_anim[self.size][self.frame]
-                self.rect= self.image_rect()
-                self.rect.center= center
+        # Carrega a animação de explosão
+      
 def game_screen(screen):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
@@ -265,28 +220,9 @@ def game_screen(screen):
     DONE = 1
 
     state = PLAYING
-    while state != DONE:
 
-        # Ajusta a velocidade do jogo.
-        clock.tick(FPS)
-
-        # Processa os eventos (mouse, teclado, botão, etc).
-        for event in pygame.event.get():
-
-            # Verifica se foi fechado.
-            if event.type == pygame.QUIT:
-                state = DONE
-
-        # A cada loop, redesenha o fundo e os sprites
-        screen.fill(BLACK)
-        tiles.draw(screen)
-
-        # Depois de desenhar tudo, inverte o display.
-        pygame.display.flip()
-
-=======
 # Inicialização do Pygame.
->>>>>>> 93d98ab90876597280e589655f412d15681cfd28
+
 pygame.init()
 pygame.mixer.init()
 
@@ -317,7 +253,26 @@ player2=Player2()
 exp=pygame.sprite.Group()
 
 #cria um grupo para as explosões 
-explosion= pygame.sprite.Group()
+
+        # Ajusta a velocidade do jogo.
+clock.tick(FPS)
+
+        # Processa os eventos (mouse, teclado, botão, etc).
+for event in pygame.event.get():
+
+            # Verifica se foi fechado.
+            if event.type == pygame.QUIT:
+                state = DONE
+
+        # A cada loop, redesenha o fundo e os sprites
+            screen.fill(BLACK)
+            tiles.draw(screen)
+            all_sprites.draw(screen)
+        
+
+        # Depois de desenhar tudo, inverte o display.
+            pygame.display.flip()
+
 
 # Cria um grupo de todos os sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
