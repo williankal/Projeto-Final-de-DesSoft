@@ -16,11 +16,9 @@ img_dir=path.join(path.dirname(__file__),'img')
 snd_dir=path.join(path.dirname(__file__),'snd')
 
 #definindo o tamanho da tela
-TITULO='BOMBERMAN'
-WIDTH=520
-HEIGHT= 360
+WIDTH=600
+HEIGHT=480
 FPS=60 
-TILE_SIZE = 40 
 
 #definindo as cores
 WHITE = (255, 255, 255)
@@ -30,65 +28,14 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
-#tipos de tile
-GRASS=0
-WALL=1
-WALL_DESTROYABLE=2
-
-
-#Mapa
-MAP=[
-    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS],
-    [GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS],
-    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS],
-    [GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS],
-    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS], 
-    [GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS],
-    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS],
-    [GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS,WALL,GRASS],
-    [GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,GRASS],
-]
-#Dados do jogador
-STILL=0
-WALKING=1
-
-# Classe Jogador que representa o herói
-class Tile(pygame.sprite.Sprite):
-
-    # Construtor da classe.
-    def __init__(self, tile_img, row, column):
-
-        # Construtor da classe pai (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        # Aumenta o tamanho do tile.
-        tile_img = pygame.transform.scale(tile_img, (TILE_SIZE, TILE_SIZE))
-
-        # Define a imagem do tile.
-        self.image = tile_img
-        # Detalhes sobre o posicionamento.
-        self.rect = self.image.get_rect()
-
-        # Posiciona o tile
-        self.rect.x = TILE_SIZE * column
-        self.rect.y = TILE_SIZE * row
-        
-def load_assets(img_dir):
-    assets = {}
-    assets[GRASS] = pygame.image.load(path.join(img_dir, 'grass.png')).convert()
-    assets[WALL] = pygame.image.load(path.join(img_dir, 'wall.png')).convert()
-   
-    return assets
-
-
 
 #criando o player 1
 class Player1(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        player_img=pygame.image.load(path.join(img_dir,'Explosion-1.png')).convert()#colocar o nome da imagem do jogador
+        player_img=pygame.image.load(path.join(img_dir,'bomb1.png')).convert()#colocar o nome da imagem do jogador
         self.image=player_img
-        self.image=pygame.transform.scale(player_img,(150,140))
+        self.image=pygame.transform.scale(player_img,(15,14))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = (WIDTH)-15
@@ -118,9 +65,9 @@ class Player1(pygame.sprite.Sprite):
 class Player2(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        player_img=pygame.image.load(path.join(img_dir,'Explosion-1.png')).convert()#colocar o nome da imagem do jogador
+        player_img=pygame.image.load(path.join(img_dir,'bomb1.png')).convert()#colocar o nome da imagem do jogador
         self.image=player_img
-        self.image=pygame.transform.scale(player_img,(150,140))
+        self.image=pygame.transform.scale(player_img,(15,14))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = 0
@@ -145,12 +92,37 @@ class Player2(pygame.sprite.Sprite):
             self.rect.top=0
         '''if keystate[pygame.K_SPACE]:
             self.shoot()'''
+
+#cria a class explosions 
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, center, size):
+        pygame.sprite.Sprite.__init__(self)
+        self.size=size
+        self.image=explosion_anim[self.size][1]
+        self.rect=self.image.get_rect()
+        self.rect.center= center
+        self.frame=0
+        self.last_update=pygame.time.get_ticks()
+        self.frame_rate=50
+        
+    def update(self):
+        now=pygame.time.get_ticks()
+        if now - self.last_update>self.frame_rate:
+            self.last_update= now
+            self.frame +=1
+            if self.frame==len(explosion_anim[self.size]):
+                self.kill()
+            else:
+                center= self.rect.center
+                self.image=explosion_anim[self.size][self.frame]
+                self.rect= self.image.get_rect()
+                self.rect.center= center
             
-#cria os     s destruivel
+#cria os muros destruivel
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        mob_img = pygame.image.load(path.join(img_dir, "bomb1.png")).convert()#Colocar imagem do muro
+        mob_img = pygame.image.load(path.join(img_dir, "fire.png")).convert()#Colocar imagem do muro
         self.image = pygame.transform.scale(mob_img, (50, 38))
         self.image.set_colorkey(BLACK)
         #---------------------------------------------------------------Arrumar
@@ -160,16 +132,16 @@ class Mob(pygame.sprite.Sprite):
         # Sorteia um lugar inicial em y
         self.rect.y = random.randrange(-100, -40)
         # Sorteia uma velocidade inicial
-        '''
+        
         self.speedx = random.randrange(-3, 3)
         self.speedy = random.randrange(2, 9)
-        '''
+        
         self.radius = int(self.rect.width * .85 / 2)#ajustar o tamanho dos mobs
     #atualiza a posição do jogador   
-    '''
+    
     def update(self):
         self.rect.x += self.speedx
-        self.rect.y += self.speedy'''
+        self.rect.y += self.speedy
         
 class Bomb1(pygame.sprite.Sprite):
     
@@ -179,11 +151,12 @@ class Bomb1(pygame.sprite.Sprite):
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
-        # Carregando a imagem da bomba.
+        # Carregando a imagem de fundo.
         bomb_img = pygame.image.load(path.join(img_dir, "Bomb1.png")).convert()#colocar a imagem da bomba
         self.image=bomb_img
         self.image = bomb_img
-        self.image=pygame.transform.scale(bomb_img,(50,50))
+        self.image=pygame.transform.scale(bomb_img,(15,14))
+        
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
         
@@ -194,35 +167,18 @@ class Bomb1(pygame.sprite.Sprite):
         self.rect.bottom = y
         self.rect.centerx = x
         self.speedy = 0
+        
+    # Metodo que atualiza a posição da navinha
+    def update(self):
+        self.rect.y += self.speedy 
 
-# Classe que representa uma explosão de meteoro
+#criando a explosãp da bomba
 
 
-        # Carrega a animação de explosão
-      
-def game_screen(screen):
-    # Variável para o ajuste de velocidade
-    clock = pygame.time.Clock()
-
-    # Carrega assets
-    assets = load_assets(img_dir)
-
-    # Cria um grupo de tiles.
-    tiles = pygame.sprite.Group()
-    # Cria tiles de acordo com o mapa
-    for row in range(len(MAP)):
-        for column in range(len(MAP[row])):
-            tile_type = MAP[row][column]
-            tile = Tile(assets[tile_type], row, column)
-            tiles.add(tile)
-
-    PLAYING = 0
-    DONE = 1
-
-    state = PLAYING
-
+            
+        
+        
 # Inicialização do Pygame.
-
 pygame.init()
 pygame.mixer.init()
 
@@ -230,14 +186,28 @@ pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Nome do jogo
-pygame.display.set_caption(TITULO)
+pygame.display.set_caption("Bomberman")
 
+# Variável para o ajuste de velocidade
+clock = pygame.time.Clock()
 
-# Comando para evitar travamentos.
-try:
-    game_screen(screen)
-finally:
-    pygame.quit()
+# Carrega o fundo do jogo
+background = pygame.image.load(path.join(img_dir, 'campo.png')).convert()#colocar o mapa do jogo
+background_rect = background.get_rect()
+
+#carrega a imagem das explosões
+explosion_anim={}
+explosion_anim['lg']=[]
+explosion_anim['sm']=[]
+for i in np.arange(1,14,1):
+    filename='Explosion-{0}.png.png'.format(i)
+    img=pygame.image.load(path.join(img_dir, filename)).convert()
+    img.set_colorkey(BLACK)
+    img_lg=pygame.transform.scale(img, (50,50))
+    explosion_anim['lg'].append(img_lg)
+    img_sm=pygame.transform.scale(img, (25,25))
+    explosion_anim['sm'].append(img_sm)
+
 # Carrega os sons do jogo
 '''pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))#colocar os sons
 pygame.mixer.music.set_volume(0.4)
@@ -248,31 +218,6 @@ pew_sound = pygame.mixer.Sound(path.join(snd_dir, 'pew.wav'))#arrumar som'''
 # Cria uma nave. O construtor será chamado automaticamente.
 player1 = Player1()
 player2=Player2()
-
-#carrega as explosões da bomba
-exp=pygame.sprite.Group()
-
-#cria um grupo para as explosões 
-
-        # Ajusta a velocidade do jogo.
-clock.tick(FPS)
-
-        # Processa os eventos (mouse, teclado, botão, etc).
-for event in pygame.event.get():
-
-            # Verifica se foi fechado.
-            if event.type == pygame.QUIT:
-                state = DONE
-
-        # A cada loop, redesenha o fundo e os sprites
-            screen.fill(BLACK)
-            tiles.draw(screen)
-            all_sprites.draw(screen)
-        
-
-        # Depois de desenhar tudo, inverte o display.
-            pygame.display.flip()
-
 
 # Cria um grupo de todos os sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
@@ -336,14 +281,12 @@ try:
                     bomb = Bomb1(player1.rect.centerx, player1.rect.top)
                     all_sprites.add(bomb)
                     bombs.add(bomb)
-                   
                     '''
                     pew_sound.play()'''
                 if event.key == pygame.K_e:
                     bomb = Bomb1(player2.rect.centerx, player2.rect.top)
                     all_sprites.add(bomb)
                     bombs.add(bomb)
-            
                     '''
                     pew_sound.play()'''
             # Verifica se soltou alguma tecla.
@@ -376,6 +319,8 @@ try:
             # O meteoro e destruido e precisa ser recriado
             '''
             destroy_sound.play()'''
+            expl=Explosion(hit.rect.center, 'lg')
+            all_sprites.add(expl)
             m = Mob() 
             all_sprites.add(m)
             mobs.add(m)
@@ -387,7 +332,7 @@ try:
             # Toca o som da colisão
             '''
             boom_sound.play()'''
-            time.sleep(1) # Precisa esperar senão fecha
+            time.sleep(1) # Precisa esperar se não fecha
             
             running = False
     
