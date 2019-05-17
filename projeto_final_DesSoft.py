@@ -324,16 +324,24 @@ try:
             '''
             destroy_sound.play()'''
             expl=Explosion(hit.rect.center, 'lg')
+            exp.add(expl)
             all_sprites.add(expl)
             m = Mob() 
             all_sprites.add(m)
             mobs.add(m)
         
         # Verifica se houve colisão entre nave e meteoro
-        hits = pygame.sprite.spritecollide(player1, exp, False, pygame.sprite.collide_circle)
-        hits = pygame.sprite.spritecollide(player2, exp, False, pygame.sprite.collide_circle)
-        if hits:
+        hits1 = pygame.sprite.spritecollide(player1, exp, False, pygame.sprite.collide_circle)
+        hits2 = pygame.sprite.spritecollide(player2, exp, False, pygame.sprite.collide_circle)
+        if hits1:
             # Toca o som da colisão
+            '''
+            boom_sound.play()'''
+            time.sleep(1) # Precisa esperar se não fecha
+            
+            running = False
+        if hits2:
+              # Toca o som da colisão
             '''
             boom_sound.play()'''
             time.sleep(1) # Precisa esperar se não fecha
