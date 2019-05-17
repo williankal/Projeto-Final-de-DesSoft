@@ -75,9 +75,7 @@ class Player2(pygame.sprite.Sprite):
         self.speedx=0
         self.speedy=0
         self.radius=10
-        ''''self.shoot_delay= 500
-        self.last_shoot= pygame.time.get_ticks()'''
-        
+     
     def update(self):
         '''keystate=pygame.key.get_pressed()'''
         self.rect.y+=self.speedy
@@ -90,8 +88,7 @@ class Player2(pygame.sprite.Sprite):
             self.rect.bottom=HEIGHT
         if self.rect.top <0 :
             self.rect.top=0
-        '''if keystate[pygame.K_SPACE]:
-            self.shoot()'''
+       
 
 #cria a class explosions 
 class Explosion(pygame.sprite.Sprite):
@@ -138,11 +135,17 @@ class Mob(pygame.sprite.Sprite):
         
         self.radius = int(self.rect.width * .85 / 2)#ajustar o tamanho dos mobs
     #atualiza a posição do jogador   
-    
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
         
+        #se o fogo passar da tela volta para cima
+        if self.rect.top>HEIGHT+10 or self.rect.left<-25 or self.rect.right>WIDTH+20:
+            self.rect.x=random.randrange(WIDTH - self.rect.width)
+            self.rect.y=random.randrange(-100,-40)
+            self.speedx=random.randrange(-3,3)
+            self.speedy=random.randrange(2,9)
+      
 class Bomb1(pygame.sprite.Sprite):
     
     # Construtor da classe.
@@ -192,7 +195,7 @@ pygame.display.set_caption("Bomberman")
 clock = pygame.time.Clock()
 
 # Carrega o fundo do jogo
-background = pygame.image.load(path.join(img_dir, 'campo.png')).convert()#colocar o mapa do jogo
+background = pygame.image.load(path.join(img_dir, 'fundo.jpg')).convert()#colocar o mapa do jogo
 background_rect = background.get_rect()
 
 #carrega a imagem das explosões
@@ -203,9 +206,9 @@ for i in np.arange(1,14,1):
     filename='Explosion-{0}.png.png'.format(i)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (50,50))
+    img_lg=pygame.transform.scale(img, (300,300))
     explosion_anim['lg'].append(img_lg)
-    img_sm=pygame.transform.scale(img, (25,25))
+    img_sm=pygame.transform.scale(img, (250,250))
     explosion_anim['sm'].append(img_sm)
 
 # Carrega os sons do jogo
@@ -224,7 +227,9 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(player1)
 all_sprites.add(player2)
 
-# Cria um grupo só dos meteoros
+#cria um grupo para as explosões
+exp=pygame.sprite.Group()
+#Cria um grupo só dos meteoros
 mobs = pygame.sprite.Group()
 
 # Cria um grupo para tiros
@@ -235,7 +240,6 @@ for i in range(8):
     m = Mob()
     all_sprites.add(m)
     mobs.add(m)
-
 # Comando para evitar travamentos.
 try:
     
@@ -326,8 +330,8 @@ try:
             mobs.add(m)
         
         # Verifica se houve colisão entre nave e meteoro
-        hits = pygame.sprite.spritecollide(player1, mobs, False, pygame.sprite.collide_circle)
-        hits = pygame.sprite.spritecollide(player2, mobs, False, pygame.sprite.collide_circle)
+        hits = pygame.sprite.spritecollide(player1, exp, False, pygame.sprite.collide_circle)
+        hits = pygame.sprite.spritecollide(player2, exp, False, pygame.sprite.collide_circle)
         if hits:
             # Toca o som da colisão
             '''
