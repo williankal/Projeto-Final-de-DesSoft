@@ -146,6 +146,30 @@ class Mob(pygame.sprite.Sprite):
             self.speedx=random.randrange(-3,3)
             self.speedy=random.randrange(2,9)
       
+class wall(pygame.sprite.Sprite):
+     
+    def __init__(self):
+        
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+        
+        # Carregando a imagem de fundo.
+        wall_img = pygame.image.load(path.join(img_dir, "bomb1.png")).convert()
+        
+        # Diminuindo o tamanho da imagem.
+        self.image = pygame.transform.scale(wall_img, (50, 38))
+        
+        # Deixando transparente.
+        self.image.set_colorkey(BLACK)
+        
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+        
+        # Sorteia um lugar inicial em x
+        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        # Sorteia um lugar inicial em y
+        self.rect.y = random.randrange(WIDTH-self.rect.width)
+        
 class Bomb1(pygame.sprite.Sprite):
     
     # Construtor da classe.
@@ -234,12 +258,18 @@ mobs = pygame.sprite.Group()
 
 # Cria um grupo para tiros
 bombs = pygame.sprite.Group()
+walls = pygame.sprite.Group() 
 
 # Cria 8 meteoros e adiciona no grupo meteoros
 for i in range(8):
     m = Mob()
     all_sprites.add(m)
     mobs.add(m)
+    
+for d in range(10):
+    m=wall()
+    all_sprites.add(m)
+    walls.add(m)
 # Comando para evitar travamentos.
 try:
     
@@ -278,9 +308,7 @@ try:
                     player2.speedx=-8
                 if event.key==pygame.K_d:
                     player2.speedx=8
-                
-                        
-                # Se for um espaço atira!
+                 # Se for um espaço atira!
                 if event.key == pygame.K_SPACE:
                     bomb = Bomb1(player1.rect.centerx, player1.rect.top)
                     all_sprites.add(bomb)
@@ -291,9 +319,6 @@ try:
                     bomb = Bomb1(player2.rect.centerx, player2.rect.top)
                     all_sprites.add(bomb)
                     bombs.add(bomb)
-                    '''
-                    pew_sound.play()'''
-            # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
@@ -311,7 +336,40 @@ try:
                 if event.key==pygame.K_a:
                     player2.speedx=0
                 if event.key==pygame.K_d:
-                    player2.speedx=0
+                    player2.speedx=0    
+                
+        
+        parede = pygame.sprite.spritecollide(player1, walls, False)
+        for s in parede:
+            if player1.speedx >0:
+                player1.rect.right = s.rect.left
+                player1.speedx=0
+            if player1.speedx<0:
+                player1.rect.left = s.rect.right
+                player1.speedx=0
+            if player1.speedy>0:
+                player1.rect.bottom=s.rect.top
+                player1.speedy=0
+            if player1.speedy<0:
+                player1.rect.top=s.rect.bottom
+                player1.speedy=0
+                
+                
+            if player2.speedx >0:
+                player2.rect.right = s.rect.left
+                player1.speedx=0
+            if player2.speedx<0:
+                player2.rect.left = s.rect.right
+                player1.speedx=0
+            if player2.speedy>0:
+                player2.rect.bottom=s.rect.top
+                player1.speedy=0
+            if player2.speedy<0:
+                player2.rect.top=s.rect.bottom
+                player1.speedy=0
+            #player1.speedx=0
+          
+    
                     
         # Depois de processar os eventos.
         # Atualiza a acao de cada sprite.
