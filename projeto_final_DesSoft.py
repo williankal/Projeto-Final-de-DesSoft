@@ -10,14 +10,14 @@ import time
 from os import path
 import random
 import numpy as np
+from init_screen import init_screen, final_screen
+from config import WIDTH, HEIGHT, INIT, GAME, QUIT
+
 
 #estabelecendo a pasta com as figuras e sons
 img_dir=path.join(path.dirname(__file__),'img')
 snd_dir=path.join(path.dirname(__file__),'snd')
 
-#definindo o tamanho da tela
-WIDTH=600
-HEIGHT=480
 FPS=60 
 
 #definindo as cores
@@ -218,6 +218,10 @@ pygame.display.set_caption("Bomberman")
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
 
+#carrega a tela quando o player1 ou 2 ganha
+p1_win=pygame.image.load(path.join(img_dir,'player1_win.png')).convert()#colocar a imagem quando o player 1 ganha
+p2_win=pygame.image.load(path.join(img_dir, 'player2_win.png')).convert()#colocar a imagem quando o player2 ganha
+
 # Carrega o fundo do jogo
 background = pygame.image.load(path.join(img_dir, 'fundo.jpg')).convert()#colocar o mapa do jogo
 background_rect = background.get_rect()
@@ -395,21 +399,25 @@ try:
             # Toca o som da colisão
             '''
             boom_sound.play()'''
-            time.sleep(1) # Precisa esperar se não fecha
+            #time.sleep(1) # Precisa esperar se não fecha
             
-            running = False
+            final_screen(screen,hits1,hits2)
+            time.sleep(3)
+            init_screen(screen)
         if hits2:
               # Toca o som da colisão
             '''
             boom_sound.play()'''
-            time.sleep(1) # Precisa esperar se não fecha
+            #time.sleep(1) # Precisa esperar se não fecha
             
-            running = False
+            final_screen(screen,hits1,hits2)
+            time.sleep(3)
+            init_screen(screen)
     
-        # A cada loop, redesenha o fundo e os sprites
+        '''# A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
-        all_sprites.draw(screen)
+        all_sprites.draw(screen)'''
         
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
