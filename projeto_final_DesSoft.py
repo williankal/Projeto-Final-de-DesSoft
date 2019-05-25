@@ -10,14 +10,14 @@ import time
 from os import path
 import random
 import numpy as np
+from init_screen import init_screen, final_screen
+from config import WIDTH, HEIGHT, INIT, GAME, QUIT
+
 
 #estabelecendo a pasta com as figuras e sons
 img_dir=path.join(path.dirname(__file__),'img')
 snd_dir=path.join(path.dirname(__file__),'snd')
 
-#definindo o tamanho da tela
-WIDTH=600
-HEIGHT=480
 FPS=60 
 
 #definindo as cores
@@ -31,11 +31,10 @@ YELLOW = (255, 255, 0)
 
 #criando o player 1
 class Player1(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,size):
         pygame.sprite.Sprite.__init__(self)
-        player_img=pygame.image.load(path.join(img_dir,'bomb1.png')).convert()#colocar o nome da imagem do jogador
-        self.image=player_img
-        self.image=pygame.transform.scale(player_img,(15,14))
+        self.size=size
+        self.image=player1_anim[self.size][1]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = (WIDTH)-15
@@ -43,6 +42,9 @@ class Player1(pygame.sprite.Sprite):
         self.speedx=0
         self.speedy=0
         self.radius=10
+        self.frame=0
+        self.last_update=pygame.time.get_ticks()
+        self.frame_rate=50
         '''self.shoot_delay= 500
         self.last_shoot= pygame.time.get_ticks()'''
         
@@ -58,25 +60,38 @@ class Player1(pygame.sprite.Sprite):
             self.rect.bottom=HEIGHT
         if self.rect.top <0 :
             self.rect.top=0
+        now=pygame.time.get_ticks()
+        if now - self.last_update>self.frame_rate:
+            self.last_update= now
+            self.frame +=1
+            if self.frame==len(player1_anim[self.size]):
+                self.frame=0
+
+            center= self.rect.center
+            self.image=player1_anim[self.size][self.frame]
+            self.rect= self.image.get_rect()
+            self.rect.center= center
         '''
         if keystate[pygame.K_SPACE]:
             self.shoot()'''
        
 class Player2(pygame.sprite.Sprite):
-    def __init__(self):
+   def __init__(self,size):
         pygame.sprite.Sprite.__init__(self)
-        player_img=pygame.image.load(path.join(img_dir,'bomb1.png')).convert()#colocar o nome da imagem do jogador
-        self.image=player_img
-        self.image=pygame.transform.scale(player_img,(15,14))
+        self.size=size
+        self.image=player2_anim[self.size][1]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.rect.centerx = 0
-        self.rect.bottom = 0
+        self.rect.centerx = (WIDTH)
+        self.rect.bottom = (HEIGHT)
         self.speedx=0
         self.speedy=0
         self.radius=10
+        self.frame=0
+        self.last_update=pygame.time.get_ticks()
+        self.frame_rate=50
      
-    def update(self):
+   def update(self):
         '''keystate=pygame.key.get_pressed()'''
         self.rect.y+=self.speedy
         self.rect.x += self.speedx
@@ -88,7 +103,17 @@ class Player2(pygame.sprite.Sprite):
             self.rect.bottom=HEIGHT
         if self.rect.top <0 :
             self.rect.top=0
-       
+        now=pygame.time.get_ticks()
+        if now - self.last_update>self.frame_rate:
+            self.last_update= now
+            self.frame +=1
+            if self.frame==len(player2_anim[self.size]):
+                self.frame=0
+
+            center= self.rect.center
+            self.image=player2_anim[self.size][self.frame]
+            self.rect= self.image.get_rect()
+            self.rect.center= center
 
 #cria a class explosions 
 class Explosion(pygame.sprite.Sprite):
@@ -154,7 +179,7 @@ class wall(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        wall_img = pygame.image.load(path.join(img_dir, "bomb1.png")).convert()
+        wall_img = pygame.image.load(path.join(img_dir, "wall.jpg")).convert()
         
         # Diminuindo o tamanho da imagem.
         self.image = pygame.transform.scale(wall_img, (50, 38))
@@ -218,9 +243,34 @@ pygame.display.set_caption("Bomberman")
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
 
+#carrega a tela quando o player1 ou 2 ganha
+p1_win=pygame.image.load(path.join(img_dir,'player1_win.png')).convert()#colocar a imagem quando o player 1 ganha
+p2_win=pygame.image.load(path.join(img_dir, 'player2_win.png')).convert()#colocar a imagem quando o player2 ganha
+
 # Carrega o fundo do jogo
-background = pygame.image.load(path.join(img_dir, 'fundo.jpg')).convert()#colocar o mapa do jogo
+background = pygame.image.load(path.join(img_dir, 'fundo.png')).convert()#colocar o mapa do jogo
+background=pygame.transform.scale(background,(480,600))
 background_rect = background.get_rect()
+
+#animação do jogador1
+player1_anim={}
+player1_anim['front']=[]
+for a in np.arange(1,3,1):
+    filename='pl1_front{0}.png'.format(a)
+    img=pygame.image.load(path.join(img_dir, filename)).convert()
+    img.set_colorkey(BLACK)
+    img_lg=pygame.transform.scale(img, (50,50))
+    player1_anim['front'].append(img_lg)
+  
+#carrega animação jogador 2
+player2_anim={}
+player2_anim['front2']=[]
+for a in np.arange(1,3,1):
+    filename='pl2_front{0}.png'.format(a)
+    img=pygame.image.load(path.join(img_dir, filename)).convert()
+    img.set_colorkey(BLACK)
+    img_lg=pygame.transform.scale(img, (50,50))
+    player2_anim['front2'].append(img_lg)
 
 #carrega a imagem das explosões
 explosion_anim={}
@@ -230,7 +280,7 @@ for i in np.arange(1,14,1):
     filename='Explosion-{0}.png.png'.format(i)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (300,300))
+    img_lg=pygame.transform.scale(img, (100,100))
     explosion_anim['lg'].append(img_lg)
     img_sm=pygame.transform.scale(img, (250,250))
     explosion_anim['sm'].append(img_sm)
@@ -243,8 +293,8 @@ destroy_sound = pygame.mixer.Sound(path.join(snd_dir, 'expl6.wav'))#arrumar som
 pew_sound = pygame.mixer.Sound(path.join(snd_dir, 'pew.wav'))#arrumar som'''
 
 # Cria uma nave. O construtor será chamado automaticamente.
-player1 = Player1()
-player2=Player2()
+player1 =Player1('front')
+player2=Player2('front2')
 
 # Cria um grupo de todos os sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
@@ -277,6 +327,7 @@ try:
     '''
     pygame.mixer.music.play(loops=-1)'''
     running = True
+    init_screen(screen)
     while running:
         
         # Ajusta a velocidade do jogo.
@@ -373,7 +424,7 @@ try:
     
                     
         # Depois de processar os eventos.
-        # Atualiza a acao de cada sprite.
+        # Atualiza a ação de cada sprite.
         all_sprites.update()
         
         # Verifica se houve colisão entre tiro e meteoro
@@ -392,21 +443,13 @@ try:
         # Verifica se houve colisão entre nave e meteoro
         hits1 = pygame.sprite.spritecollide(player1, exp, False, pygame.sprite.collide_circle)
         hits2 = pygame.sprite.spritecollide(player2, exp, False, pygame.sprite.collide_circle)
-        if hits1:
+        if hits1 or hits2:
             # Toca o som da colisão
             '''
             boom_sound.play()'''
-            time.sleep(1) # Precisa esperar se não fecha
-            
-            running = False
-        if hits2:
-              # Toca o som da colisão
-            '''
-            boom_sound.play()'''
-            time.sleep(1) # Precisa esperar se não fecha
-            
-            running = False
-    
+            running=False
+            # Precisa esperar se não fecha
+        
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
@@ -415,6 +458,7 @@ try:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
         
+    final_screen(screen,hits1,hits2)       
 finally:
     
     pygame.quit()
