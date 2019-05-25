@@ -33,10 +33,8 @@ YELLOW = (255, 255, 0)
 class Player1(pygame.sprite.Sprite):
     def __init__(self,size):
         pygame.sprite.Sprite.__init__(self)
-        #player_img=pygame.image.load(path.join(img_dir,'bomb1.png')).convert()#colocar o nome da imagem do jogador
         self.size=size
         self.image=player1_anim[self.size][1]
-        #self.image=pygame.transform.scale(player_img,(15,14))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = (WIDTH)-15
@@ -78,20 +76,22 @@ class Player1(pygame.sprite.Sprite):
             self.shoot()'''
        
 class Player2(pygame.sprite.Sprite):
-    def __init__(self):
+   def __init__(self,size):
         pygame.sprite.Sprite.__init__(self)
-        player_img=pygame.image.load(path.join(img_dir,'bomb1.png')).convert()#colocar o nome da imagem do jogador
-        self.image=player_img
-        self.image=pygame.transform.scale(player_img,(15,14))
+        self.size=size
+        self.image=player2_anim[self.size][1]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.rect.centerx = 0
-        self.rect.bottom = 0
+        self.rect.centerx = (WIDTH)
+        self.rect.bottom = (HEIGHT)
         self.speedx=0
         self.speedy=0
         self.radius=10
+        self.frame=0
+        self.last_update=pygame.time.get_ticks()
+        self.frame_rate=50
      
-    def update(self):
+   def update(self):
         '''keystate=pygame.key.get_pressed()'''
         self.rect.y+=self.speedy
         self.rect.x += self.speedx
@@ -103,7 +103,17 @@ class Player2(pygame.sprite.Sprite):
             self.rect.bottom=HEIGHT
         if self.rect.top <0 :
             self.rect.top=0
-       
+        now=pygame.time.get_ticks()
+        if now - self.last_update>self.frame_rate:
+            self.last_update= now
+            self.frame +=1
+            if self.frame==len(player2_anim[self.size]):
+                self.frame=0
+
+            center= self.rect.center
+            self.image=player2_anim[self.size][self.frame]
+            self.rect= self.image.get_rect()
+            self.rect.center= center
 
 #cria a class explosions 
 class Explosion(pygame.sprite.Sprite):
@@ -249,18 +259,18 @@ for a in np.arange(1,3,1):
     filename='pl1_front{0}.png'.format(a)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (100,100))
+    img_lg=pygame.transform.scale(img, (50,50))
     player1_anim['front'].append(img_lg)
   
 #carrega animação jogador 2
 player2_anim={}
-player2_anim['front']=[]
-for a in np.arange(1,2,1):
+player2_anim['front2']=[]
+for a in np.arange(1,3,1):
     filename='pl2_front{0}.png'.format(a)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (100,100))
-    player2_anim['front'].append(img_lg)
+    img_lg=pygame.transform.scale(img, (50,50))
+    player2_anim['front2'].append(img_lg)
 
 #carrega a imagem das explosões
 explosion_anim={}
@@ -284,7 +294,7 @@ pew_sound = pygame.mixer.Sound(path.join(snd_dir, 'pew.wav'))#arrumar som'''
 
 # Cria uma nave. O construtor será chamado automaticamente.
 player1 =Player1('front')
-player2=Player2()
+player2=Player2('front2')
 
 # Cria um grupo de todos os sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
