@@ -293,21 +293,21 @@ try:
             if event.type == pygame.KEYDOWN:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
-                    player1.speedx = -8
+                    player1.speedx = -5
                 if event.key == pygame.K_RIGHT:
-                    player1.speedx = 8
+                    player1.speedx = 5
                 if event.key==pygame.K_UP:
-                    player1.speedy=- 8
+                    player1.speedy=- 5
                 if event.key==pygame.K_DOWN:
-                    player1.speedy=8
+                    player1.speedy=5
                 if event.key==pygame.K_w:
-                    player2.speedy=-8
+                    player2.speedy=-5
                 if event.key==pygame.K_s:
-                    player2.speedy=8
+                    player2.speedy=5
                 if event.key==pygame.K_a:
-                    player2.speedx=-8
+                    player2.speedx=-5
                 if event.key==pygame.K_d:
-                    player2.speedx=8
+                    player2.speedx=5
                  # Se for um espaço atira!
                 if event.key == pygame.K_SPACE:
                     bomb = Bomb1(player1.rect.centerx, player1.rect.top)
@@ -338,7 +338,7 @@ try:
                 if event.key==pygame.K_d:
                     player2.speedx=0    
                 
-        
+        parede2 = pygame.sprite.spritecollide(player2, walls, False)        
         parede = pygame.sprite.spritecollide(player1, walls, False)
         for s in parede:
             if player1.speedx >0:
@@ -353,21 +353,22 @@ try:
             if player1.speedy<0:
                 player1.rect.top=s.rect.bottom
                 player1.speedy=0
-                
-                
+       
+        for s in parede2:
             if player2.speedx >0:
                 player2.rect.right = s.rect.left
-                player1.speedx=0
+                player2.speedx=0
             if player2.speedx<0:
                 player2.rect.left = s.rect.right
-                player1.speedx=0
+                player2.speedx=0
             if player2.speedy>0:
                 player2.rect.bottom=s.rect.top
-                player1.speedy=0
+                player2.speedy=0
             if player2.speedy<0:
                 player2.rect.top=s.rect.bottom
-                player1.speedy=0
-            #player1.speedx=0
+                player2.speedy=0
+                
+            
           
     
                     
