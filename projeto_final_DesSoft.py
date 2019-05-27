@@ -248,7 +248,7 @@ p1_win=pygame.image.load(path.join(img_dir,'player1_win.png')).convert()#colocar
 p2_win=pygame.image.load(path.join(img_dir, 'player2_win.png')).convert()#colocar a imagem quando o player2 ganha
 
 # Carrega o fundo do jogo
-background = pygame.image.load(path.join(img_dir, 'fundo.png')).convert()#colocar o mapa do jogo
+background = pygame.image.load(path.join(img_dir, 'hellfundo.png')).convert()#colocar o mapa do jogo
 background=pygame.transform.scale(background,(480,600))
 background_rect = background.get_rect()
 
@@ -458,7 +458,8 @@ try:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
         
-    final_screen(screen,hits1,hits2)       
+    final_screen(screen,hits1,hits2)  
+    time.sleep(1000)     
 finally:
     
     pygame.quit()
