@@ -204,10 +204,10 @@ class Bomb1(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        bomb_img = pygame.image.load(path.join(img_dir, "Bomb1.png")).convert()#colocar a imagem da bomba
+        bomb_img = pygame.image.load(path.join(img_dir, "bombs_teste.png")).convert_alpha()#colocar a imagem da bomba
         self.image=bomb_img
         self.image = bomb_img
-        self.image=pygame.transform.scale(bomb_img,(15,14))
+        self.image=pygame.transform.scale(bomb_img,(32,32))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -459,7 +459,7 @@ try:
         pygame.display.flip()
         
     final_screen(screen,hits1,hits2)  
-    time.sleep(1000)     
+    time.sleep(3)     
 finally:
     
     pygame.quit()
