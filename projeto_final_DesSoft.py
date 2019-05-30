@@ -45,6 +45,7 @@ class Player1(pygame.sprite.Sprite):
         self.frame=0
         self.last_update=pygame.time.get_ticks()
         self.frame_rate=50
+        self.pontos=3
         '''self.shoot_delay= 500
         self.last_shoot= pygame.time.get_ticks()'''
         
@@ -90,6 +91,7 @@ class Player2(pygame.sprite.Sprite):
         self.frame=0
         self.last_update=pygame.time.get_ticks()
         self.frame_rate=50
+        self.pontos=3
      
    def update(self):
         '''keystate=pygame.key.get_pressed()'''
@@ -173,7 +175,7 @@ class Mob(pygame.sprite.Sprite):
       
 class wall(pygame.sprite.Sprite):
      
-    def __init__(self):
+    def __init__(self, x,y):
         
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
@@ -182,7 +184,7 @@ class wall(pygame.sprite.Sprite):
         wall_img = pygame.image.load(path.join(img_dir, "wall.jpg")).convert()
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(wall_img, (50, 38))
+        self.image = pygame.transform.scale(wall_img, (40, 40))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -191,9 +193,10 @@ class wall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         # Sorteia um lugar inicial em x
-        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        #self.rect.x = random.randrange(WIDTH - self.rect.width)
+        self.rect.x = x
         # Sorteia um lugar inicial em y
-        self.rect.y = random.randrange(WIDTH-self.rect.width)
+        self.rect.y = y
         
 class Bomb1(pygame.sprite.Sprite):
     
@@ -315,11 +318,17 @@ for i in range(8):
     m = Mob()
     all_sprites.add(m)
     mobs.add(m)
-    
-for d in range(10):
-    m=wall()
+x=120
+y=120
+for d in range(25):
+    m=wall(x,y)
     all_sprites.add(m)
     walls.add(m)
+    x+=120
+    if x>=420:
+        y+=120
+        x=60
+        
 # Comando para evitar travamentos.
 try:
     
