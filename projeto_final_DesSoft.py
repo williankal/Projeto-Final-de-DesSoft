@@ -184,7 +184,7 @@ class wall(pygame.sprite.Sprite):
         wall_img = pygame.image.load(path.join(img_dir, "wall.jpg")).convert()
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(wall_img, (40, 40))
+        self.image = pygame.transform.scale(wall_img, (60,60))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -252,7 +252,7 @@ p2_win=pygame.image.load(path.join(img_dir, 'player2_win.png')).convert()#coloca
 
 # Carrega o fundo do jogo
 background = pygame.image.load(path.join(img_dir, 'hellfundo.png')).convert()#colocar o mapa do jogo
-background=pygame.transform.scale(background,(480,600))
+background=pygame.transform.scale(background,(600,480))
 background_rect = background.get_rect()
 
 #animação do jogador1
@@ -327,7 +327,7 @@ for d in range(25):
     x+=120
     if x>=420:
         y+=120
-        x=60
+        x=120
         
 # Comando para evitar travamentos.
 try:
