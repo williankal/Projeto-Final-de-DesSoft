@@ -4,8 +4,14 @@ Created on Fri May  3 08:09:07 2019
 
 @author: Helio
 """
+#pygamecolidemask
 #Projeto final primeiro semestre de DesSoft
 import pygame
+pygame.init()
+pygame.mixer.init()
+
+# Tamanho da tela.
+screen = pygame.display.set_mode((480, 600))
 import time
 from os import path
 import random
@@ -249,11 +255,7 @@ class Bomb1(pygame.sprite.Sprite):
         
         
 # Inicialização do Pygame.
-pygame.init()
-pygame.mixer.init()
 
-# Tamanho da tela.
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Nome do jogo
 pygame.display.set_caption("Bomberman")
@@ -261,9 +263,6 @@ pygame.display.set_caption("Bomberman")
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
 
-#carrega a tela quando o player1 ou 2 ganha
-p1_win=pygame.image.load(path.join(img_dir,'player1_win.png')).convert()#colocar a imagem quando o player 1 ganha
-p2_win=pygame.image.load(path.join(img_dir, 'player2_win.png')).convert()#colocar a imagem quando o player2 ganha
 
 # Carrega o fundo do jogo
 background = pygame.image.load(path.join(img_dir, 'hellfundo.png')).convert()#colocar o mapa do jogo
