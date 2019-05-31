@@ -225,7 +225,6 @@ class Bomb1(pygame.sprite.Sprite):
         # Carregando a imagem de fundo.
         bomb_img = pygame.image.load(path.join(img_dir, "bombs_teste.png")).convert_alpha()#colocar a imagem da bomba
         self.image=bomb_img
-        self.image = bomb_img
         self.image=pygame.transform.scale(bomb_img,(32,32))
         
         # Deixando transparente.
@@ -298,7 +297,7 @@ for a in np.arange(1,3,1):
     filename='fire_anim{0}.png'.format(a)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (80,80))
+    img_lg=pygame.transform.scale(img, (50,50))
     fire_anim['fire'].append(img_lg)
 
 #carrega a imagem das explosões
@@ -309,10 +308,9 @@ for i in np.arange(1,14,1):
     filename='Explosion-{0}.png.png'.format(i)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (100,100))
+    img_lg=pygame.transform.scale(img, (150,150))
     explosion_anim['lg'].append(img_lg)
-    img_sm=pygame.transform.scale(img, (250,250))
-    explosion_anim['sm'].append(img_sm)
+    
 
 # Carrega os sons do jogo
 '''pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))#colocar os sons

@@ -2,7 +2,7 @@ import pygame
 import random
 from os import path
 
-from config import img_dir, WHITE , FPS, GAME, QUIT
+from config import img_dir, WHITE, BLACK , FPS, GAME, QUIT
 
 
 def init_screen(screen):
@@ -46,7 +46,7 @@ def final_screen(screen,hits1,hits2):
 
     # Carrega o fundo da tela inicial
     background = pygame.image.load(path.join(img_dir, 'player1_win.png')).convert()
-    background=pygame.transform.scale(background,(48,60))
+    background=pygame.transform.scale(background,(480,600))
     background_rect = background.get_rect()
 
     running = True
@@ -58,12 +58,14 @@ def final_screen(screen,hits1,hits2):
         if hits1:
             background = pygame.image.load(path.join(img_dir, 'player2_win.png')).convert()
             background=pygame.transform.scale(background,(480,600))
+            background.set_colorkey(BLACK)
             state = QUIT
             running = False
 
         if hits2:
             background = pygame.image.load(path.join(img_dir, 'player1_win.png')).convert()
             background=pygame.transform.scale(background,(480,600))
+            background.set_colorkey(BLACK)
             state = GAME
             running = False
                     
