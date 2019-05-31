@@ -202,7 +202,7 @@ class wall(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        wall_img = pygame.image.load(path.join(img_dir, "wall.jpg")).convert()
+        wall_img = pygame.image.load(path.join(img_dir, "wall.png")).convert()
         
         # Diminuindo o tamanho da imagem.
         self.image = pygame.transform.scale(wall_img, (50,50))
@@ -248,7 +248,7 @@ class Bomb1(pygame.sprite.Sprite):
     # Metodo que atualiza a posição da navinha
     def update(self):
         self.rect.y += self.speedy 
-
+        
 # Inicialização do Pygame.
 
 
