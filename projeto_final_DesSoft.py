@@ -34,8 +34,7 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
-
-#criando o player 1
+#Classe do player 1
 class Player1(pygame.sprite.Sprite):
     def __init__(self,size):
         pygame.sprite.Sprite.__init__(self)
@@ -81,7 +80,7 @@ class Player1(pygame.sprite.Sprite):
         '''
         if keystate[pygame.K_SPACE]:
             self.shoot()'''
-       
+#classe do player 2
 class Player2(pygame.sprite.Sprite):
    def __init__(self,size):
         pygame.sprite.Sprite.__init__(self)
@@ -148,7 +147,7 @@ class Explosion(pygame.sprite.Sprite):
                 self.rect= self.image.get_rect()
                 self.rect.center= center
             
-#cria os muros destruivel
+#cria os fogos
 class Mob(pygame.sprite.Sprite):
     def __init__(self, size):
         pygame.sprite.Sprite.__init__(self)
@@ -171,7 +170,7 @@ class Mob(pygame.sprite.Sprite):
         self.speedx = random.randrange(-3, 3)
         self.speedy = random.randrange(2, 9)
         
-        self.radius = int(self.rect.width * .85 / 2)#ajustar o tamanho dos mobs
+        self.radius = int(self.rect.width * .85 / 2)#ajustar o tamanho dos fogos
     #atualiza a posição do jogador   
     def update(self):
         self.rect.x += self.speedx
@@ -194,7 +193,7 @@ class Mob(pygame.sprite.Sprite):
             self.image=fire_anim[self.size][self.frame]
             self.rect= self.image.get_rect()
             self.rect.center= center
-      
+#classe das paredes
 class wall(pygame.sprite.Sprite):
      
     def __init__(self, x,y):
@@ -219,7 +218,7 @@ class wall(pygame.sprite.Sprite):
         self.rect.x = x
         # Sorteia um lugar inicial em y
         self.rect.y = y
-        
+#classe das bombas       
 class Bomb1(pygame.sprite.Sprite):
     
     # Construtor da classe.
@@ -248,12 +247,6 @@ class Bomb1(pygame.sprite.Sprite):
     def update(self):
         self.rect.y += self.speedy 
 
-#criando a explosãp da bomba
-
-
-            
-        
-        
 # Inicialização do Pygame.
 
 
@@ -266,7 +259,7 @@ clock = pygame.time.Clock()
 
 # Carrega o fundo do jogo
 background = pygame.image.load(path.join(img_dir, 'hellfundo.png')).convert()#colocar o mapa do jogo
-background=pygame.transform.scale(background, (480,600))
+background=pygame.transform.scale(background, (480,600))#transforma a escala do png
 background_rect = background.get_rect()
 
 #animação do jogador1
@@ -318,11 +311,11 @@ boom_sound = pygame.mixer.Sound(path.join(snd_dir, 'expl3.wav'))#arrumar som
 destroy_sound = pygame.mixer.Sound(path.join(snd_dir, 'expl6.wav'))#arrumar som
 pew_sound = pygame.mixer.Sound(path.join(snd_dir, 'pew.wav'))#arrumar som'''
 
-# Cria uma nave. O construtor será chamado automaticamente.
+# Cria um jogador. O construtor será chamado automaticamente
 player1 =Player1('front')
 player2=Player2('front2')
 
-# Cria um grupo de todos os sprites e adiciona a nave.
+# Cria um grupo de todos os sprites e adiciona ao player.
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player1)
 all_sprites.add(player2)
@@ -332,7 +325,7 @@ exp=pygame.sprite.Group()
 #Cria um grupo só dos meteoros
 mobs = pygame.sprite.Group()
 
-# Cria um grupo para tiros
+# Posição das paredes no mapa
 bombs = pygame.sprite.Group()
 walls = pygame.sprite.Group() 
 x=53.3333
@@ -381,6 +374,7 @@ try:
             # Verifica se apertou alguma tecla.
             if event.type == pygame.KEYDOWN:
                 # Dependendo da tecla, altera a velocidade.
+                
                 if event.key == pygame.K_LEFT:
                     player1.speedx = -5
                 if event.key == pygame.K_RIGHT:
@@ -426,7 +420,7 @@ try:
                     player2.speedx=0
                 if event.key==pygame.K_d:
                     player2.speedx=0    
-                
+        #jogodores não conseguem passar pela parede
         parede2 = pygame.sprite.spritecollide(player2, walls, False)        
         parede = pygame.sprite.spritecollide(player1, walls, False)
         for s in parede:
