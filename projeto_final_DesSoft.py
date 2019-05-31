@@ -144,12 +144,17 @@ class Explosion(pygame.sprite.Sprite):
             
 #cria os muros destruivel
 class Mob(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, size):
         pygame.sprite.Sprite.__init__(self)
-        mob_img = pygame.image.load(path.join(img_dir, "fire.png")).convert()#Colocar imagem do muro
-        self.image = pygame.transform.scale(mob_img, (50, 38))
+        self.size=size
+        self.image=fire_anim[self.size][1]
         self.image.set_colorkey(BLACK)
-        #---------------------------------------------------------------Arrumar
+        self.rect = self.image.get_rect()
+        self.last_update=pygame.time.get_ticks()
+        self.frame=0
+        self.frame_rate=100
+        
+       
         self.rect = self.image.get_rect()
         # Sorteia um lugar inicial em x
         self.rect.x = random.randrange(WIDTH - self.rect.width)
@@ -172,6 +177,17 @@ class Mob(pygame.sprite.Sprite):
             self.rect.y=random.randrange(-100,-40)
             self.speedx=random.randrange(-3,3)
             self.speedy=random.randrange(2,9)
+        now=pygame.time.get_ticks()
+        if now - self.last_update>self.frame_rate:
+            self.last_update= now
+            self.frame +=1
+            if self.frame==len(fire_anim[self.size]):
+                self.frame=0
+
+            center= self.rect.center
+            self.image=fire_anim[self.size][self.frame]
+            self.rect= self.image.get_rect()
+            self.rect.center= center
       
 class wall(pygame.sprite.Sprite):
      
@@ -275,6 +291,16 @@ for a in np.arange(1,3,1):
     img_lg=pygame.transform.scale(img, (40,40))
     player2_anim['front2'].append(img_lg)
 
+#animacão do fogo
+fire_anim={}
+fire_anim['fire']=[]
+for a in np.arange(1,3,1):
+    filename='fire_anim{0}.png'.format(a)
+    img=pygame.image.load(path.join(img_dir, filename)).convert()
+    img.set_colorkey(BLACK)
+    img_lg=pygame.transform.scale(img, (80,80))
+    fire_anim['fire'].append(img_lg)
+
 #carrega a imagem das explosões
 explosion_anim={}
 explosion_anim['lg']=[]
@@ -326,7 +352,7 @@ for d in range(16):
         
 # Cria 8 meteoros e adiciona no grupo meteoros
 for i in range(8):
-    m = Mob()
+    m = Mob('fire')
     all_sprites.add(m)
     mobs.add(m)
 
@@ -451,7 +477,7 @@ try:
             expl=Explosion(hit.rect.center, 'lg')
             exp.add(expl)
             all_sprites.add(expl)
-            m = Mob() 
+            m = Mob('fire') 
             all_sprites.add(m)
             mobs.add(m)
         
