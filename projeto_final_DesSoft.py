@@ -184,7 +184,7 @@ class wall(pygame.sprite.Sprite):
         wall_img = pygame.image.load(path.join(img_dir, "wall.jpg")).convert()
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(wall_img, (60,60))
+        self.image = pygame.transform.scale(wall_img, (50,50))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -252,7 +252,7 @@ p2_win=pygame.image.load(path.join(img_dir, 'player2_win.png')).convert()#coloca
 
 # Carrega o fundo do jogo
 background = pygame.image.load(path.join(img_dir, 'hellfundo.png')).convert()#colocar o mapa do jogo
-background=pygame.transform.scale(background,(600,480))
+background=pygame.transform.scale(background, (480,600))
 background_rect = background.get_rect()
 
 #animação do jogador1
@@ -262,7 +262,7 @@ for a in np.arange(1,3,1):
     filename='pl1_front{0}.png'.format(a)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (50,50))
+    img_lg=pygame.transform.scale(img, (40,40))
     player1_anim['front'].append(img_lg)
   
 #carrega animação jogador 2
@@ -272,7 +272,7 @@ for a in np.arange(1,3,1):
     filename='pl2_front{0}.png'.format(a)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (50,50))
+    img_lg=pygame.transform.scale(img, (40,40))
     player2_anim['front2'].append(img_lg)
 
 #carrega a imagem das explosões
@@ -312,22 +312,28 @@ mobs = pygame.sprite.Group()
 # Cria um grupo para tiros
 bombs = pygame.sprite.Group()
 walls = pygame.sprite.Group() 
+x=53.3333
+y=53.33333
 
+for d in range(16):
+    m=wall(x,y)
+    all_sprites.add(m)
+    walls.add(m)
+    x+=106.33333333333333
+    if x>=450:
+        x=53.333333
+        y+=160
+        
 # Cria 8 meteoros e adiciona no grupo meteoros
 for i in range(8):
     m = Mob()
     all_sprites.add(m)
     mobs.add(m)
-x=120
-y=120
-for d in range(25):
-    m=wall(x,y)
-    all_sprites.add(m)
-    walls.add(m)
-    x+=120
-    if x>=420:
-        y+=120
-        x=120
+
+
+    
+    
+        
         
 # Comando para evitar travamentos.
 try:
@@ -375,7 +381,7 @@ try:
                     bombs.add(bomb)
                     '''
                     pew_sound.play()'''
-                if event.key == pygame.K_e:
+                if event.key == pygame.K_e :
                     bomb = Bomb1(player2.rect.centerx, player2.rect.top)
                     all_sprites.add(bomb)
                     bombs.add(bomb)
