@@ -238,9 +238,12 @@ class Bomb1(pygame.sprite.Sprite):
         # Detalhes sobre o posicionamento.
         self.rect = self.image.get_rect()
         
+        self.radius = int(self.rect.width * .55 / 2)
+
+        
         # Coloca no lugar inicial definido em x, y do constutor
-        self.rect.bottom = y
-        self.rect.centerx = x
+        self.rect.x = x
+        self.rect.y = y
         self.speedy = 0
         
     # Metodo que atualiza a posição da navinha
@@ -450,8 +453,36 @@ try:
             if player2.speedy<0:
                 player2.rect.top=s.rect.bottom
                 player2.speedy=0
-                
-            
+        bomba=pygame.sprite.spritecollide(player1,bombs,False)
+        bomba2=pygame.sprite.spritecollide(player2,bombs,False)
+        
+        for s in bomba:
+            if player1.speedx >0:
+                player1.rect.right = s.rect.left
+                player1.speedx=0
+            if player1.speedx<0:
+                player1.rect.left = s.rect.right
+                player1.speedx=0
+            if player1.speedy>0:
+                player1.rect.bottom=s.rect.top
+                player1.speedy=0
+            if player1.speedy<0:
+                player1.rect.top=s.rect.bottom
+                player1.speedy=0
+       
+        for s in bomba2:
+            if player2.speedx >0:
+                player2.rect.right = s.rect.left
+                player2.speedx=0
+            if player2.speedx<0:
+                player2.rect.left = s.rect.right
+                player2.speedx=0
+            if player2.speedy>0:
+                player2.rect.bottom=s.rect.top
+                player2.speedy=0
+            if player2.speedy<0:
+                player2.rect.top=s.rect.bottom
+                player2.speedy=0
           
     
                     
