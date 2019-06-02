@@ -210,7 +210,7 @@ class wall(pygame.sprite.Sprite):
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
         
-        # Detalhes sobre o posicionamento.
+        # Detalhes sobre o posicionamento. 
         self.rect = self.image.get_rect()
         
         # Sorteia um lugar inicial em x
@@ -251,9 +251,10 @@ class Bomb1(pygame.sprite.Sprite):
         
 # Inicialização do Pygame.
 
+    
 
 # Nome do jogo
-pygame.display.set_caption("Bomberman")
+pygame.display.set_caption("InsperBomb")
 
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
@@ -264,6 +265,11 @@ background = pygame.image.load(path.join(img_dir, 'hellfundo.png')).convert()#co
 background=pygame.transform.scale(background, (480,600))#transforma a escala do png
 background_rect = background.get_rect()
 
+#Música
+pygame.mixer.music.load(path.join(snd_dir, 'theme.mp3'))
+pygame.mixer.music.set_volume(0.8)
+boom_sound = pygame.mixer.Sound(path.join(snd_dir,'explio.wav'))
+  
 #animação do jogador1
 player1_anim={}
 player1_anim['front']=[]
@@ -357,8 +363,8 @@ for i in range(8):
 try:
     
     # Loop principal.
-    '''
-    pygame.mixer.music.play(loops=-1)'''
+    
+    pygame.mixer.music.play(loops=-1)
     running = True
     init_screen(screen)
     while running:
@@ -493,8 +499,8 @@ try:
         hits = pygame.sprite.groupcollide(mobs, bombs, True, True)
         for hit in hits: # Pode haver mais de um
             # O meteoro e destruido e precisa ser recriado
-            '''
-            destroy_sound.play()'''
+            
+            boom_sound.play()
             expl=Explosion(hit.rect.center, 'lg')
             exp.add(expl)
             all_sprites.add(expl)
@@ -502,7 +508,6 @@ try:
             all_sprites.add(m)
             mobs.add(m)
         
-        # Verifica se houve colisão entre nave e meteoro
         hits1 = pygame.sprite.spritecollide(player1, exp, False, pygame.sprite.collide_circle)
         hits2 = pygame.sprite.spritecollide(player2, exp, False, pygame.sprite.collide_circle)
         if hits1 or hits2:
@@ -518,6 +523,7 @@ try:
         all_sprites.draw(screen)
         
         # Depois de desenhar tudo, inverte o display.
+        
         pygame.display.flip()
         
     final_screen(screen,hits1,hits2)  
