@@ -269,7 +269,7 @@ background_rect = background.get_rect()
 pygame.mixer.music.load(path.join(snd_dir, 'theme.mp3'))
 pygame.mixer.music.set_volume(0.8)
 boom_sound = pygame.mixer.Sound(path.join(snd_dir,'explio.wav'))
-  
+death_sound = pygame.mixer.Sound(path.join(snd_dir,'death.wav'))
 #animação do jogador1
 player1_anim={}
 player1_anim['front']=[]
@@ -512,6 +512,8 @@ try:
         hits2 = pygame.sprite.spritecollide(player2, exp, False, pygame.sprite.collide_circle)
         if hits1 or hits2:
             # Toca o som da colisão
+            death_sound.play()
+            time.sleep(1)
             '''
             boom_sound.play()'''
             running=False
@@ -521,6 +523,7 @@ try:
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
+        
         
         # Depois de desenhar tudo, inverte o display.
         
