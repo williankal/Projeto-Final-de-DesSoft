@@ -410,11 +410,11 @@ try:
                         all_sprites.add(bomb)
                         bombs.add(bomb)
                     elif player1.speedy>0:
-                        bomb = Bomb1(player1.rect.centerx, player1.rect.bottom)
-                        all_sprites.add(bomb)
-                        bombs.add(bomb) 
-                    else:
                         bomb = Bomb1(player1.rect.centerx, player1.rect.top)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb)
+                    else:
+                        bomb = Bomb1(player1.rect.centerx, player1.rect.bottom)
                         all_sprites.add(bomb)
                         bombs.add(bomb)
                     
@@ -424,7 +424,7 @@ try:
                 if event.key == pygame.K_e :
                   
                     if player2.speedx>0:
-                        bomb = Bomb1(player2.rect.left, player2.rect.top)
+                        bomb = Bomb1(player2.rect.left, player2.rect.bottom)
                         all_sprites.add(bomb)
                         bombs.add(bomb)
                     elif player2.speedx<0:
@@ -432,11 +432,11 @@ try:
                         all_sprites.add(bomb)
                         bombs.add(bomb)
                     elif player2.speedy>0:
-                        bomb = Bomb1(player2.rect.centerx, player2.rect.bottom)
+                        bomb = Bomb1(player2.rect.centerx, player2.rect.top)
                         all_sprites.add(bomb)
                         bombs.add(bomb)
                     else:
-                        bomb = Bomb1(player2.rect.centerx, player2.rect.top)
+                        bomb = Bomb1(player2.rect.centerx, player2.rect.bottom)
                         all_sprites.add(bomb)
                         bombs.add(bomb)
             if event.type == pygame.KEYUP:
