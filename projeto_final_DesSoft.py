@@ -435,7 +435,7 @@ try:
                         bomb = Bomb1(player2.rect.centerx, player2.rect.top)
                         all_sprites.add(bomb)
                         bombs.add(bomb)
-                    else:
+                    elif player2.speedy<0: 
                         bomb = Bomb1(player2.rect.centerx, player2.rect.bottom)
                         all_sprites.add(bomb)
                         bombs.add(bomb)
