@@ -308,7 +308,7 @@ for i in np.arange(1,14,1):
     filename='Explosion-{0}.png.png'.format(i)
     img=pygame.image.load(path.join(img_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg=pygame.transform.scale(img, (150,150))
+    img_lg=pygame.transform.scale(img, (120,120))
     explosion_anim['lg'].append(img_lg)
     
 
@@ -349,7 +349,7 @@ for d in range(16):
         y+=160
         
 # Cria 8 meteoros e adiciona no grupo meteoros
-for i in range(8):
+for i in range(1):
     m = Mob('fire')
     all_sprites.add(m)
     mobs.add(m)
@@ -401,12 +401,14 @@ try:
                     player2.speedx=5
                  # Se for um espaço atira!
                 if event.key == pygame.K_SPACE:
+                    
                     bomb = Bomb1(player1.rect.centerx, player1.rect.top)
                     all_sprites.add(bomb)
                     bombs.add(bomb)
                     '''
                     pew_sound.play()'''
                 if event.key == pygame.K_e :
+                  
                     bomb = Bomb1(player2.rect.centerx, player2.rect.top)
                     all_sprites.add(bomb)
                     bombs.add(bomb)
