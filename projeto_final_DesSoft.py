@@ -401,17 +401,44 @@ try:
                     player2.speedx=5
                  # Se for um espaço atira!
                 if event.key == pygame.K_SPACE:
+                    if player1.speedx>0:
+                        bomb = Bomb1(player1.rect.left, player1.rect.bottom)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb)
+                    elif player1.speedx<0:
+                        bomb = Bomb1(player1.rect.right, player1.rect.top)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb)
+                    elif player1.speedy>0:
+                        bomb = Bomb1(player1.rect.centerx, player1.rect.bottom)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb) 
+                    else:
+                        bomb = Bomb1(player1.rect.centerx, player1.rect.top)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb)
                     
-                    bomb = Bomb1(player1.rect.centerx, player1.rect.top)
-                    all_sprites.add(bomb)
-                    bombs.add(bomb)
+                    
                     '''
                     pew_sound.play()'''
                 if event.key == pygame.K_e :
                   
-                    bomb = Bomb1(player2.rect.centerx, player2.rect.top)
-                    all_sprites.add(bomb)
-                    bombs.add(bomb)
+                    if player2.speedx>0:
+                        bomb = Bomb1(player2.rect.left, player2.rect.top)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb)
+                    elif player2.speedx<0:
+                        bomb = Bomb1(player2.rect.right, player2.rect.top)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb)
+                    elif player2.speedy>0:
+                        bomb = Bomb1(player2.rect.centerx, player2.rect.bottom)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb)
+                    else:
+                        bomb = Bomb1(player2.rect.centerx, player2.rect.top)
+                        all_sprites.add(bomb)
+                        bombs.add(bomb)
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
