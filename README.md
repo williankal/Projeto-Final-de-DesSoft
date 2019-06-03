@@ -2,4 +2,4 @@
 Alunos:
 Willian Kenzo Asanuma Lee: williankal@al.insper.edu.br
 
-Helio Zaia
+Helio Zaia: heliozf@al.insper.edu.br
