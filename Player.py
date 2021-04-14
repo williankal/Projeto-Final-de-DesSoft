@@ -6,8 +6,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, size, player_anim, spawn):
         pygame.sprite.Sprite.__init__(self)
         self.player_anim = player_anim
-        self.size=size
-        self.image=self.player_anim[self.size][1]
+        self.size = size
+        self.image = self.player_anim[self.size][1]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.left = spawn[0]
@@ -15,8 +15,8 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
         self.speedx = 0
         self.speedy = 0
-        self.radius=10
-        self.frame=0
+        self.radius = 10
+        self.frame = 0
         self.last_update=pygame.time.get_ticks()
         self.frame_rate=50
         self.collision_tolerance = 10
@@ -82,19 +82,19 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
-        if self.rect.bottom>HEIGHT:
-            self.rect.bottom=HEIGHT
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
         if self.rect.top < 0:
-            self.rect.top=0
+            self.rect.top = 0
 
         now = pygame.time.get_ticks()
         if now - self.last_update>self.frame_rate:
-            self.last_update= now
-            self.frame +=1
-            if self.frame==len(self.player_anim[self.size]):
-                self.frame=0
+            self.last_update = now
+            self.frame += 1
+            if self.frame == len(self.player_anim[self.size]):
+                self.frame = 0
 
-            center= self.rect.center
-            self.image=self.player_anim[self.size][self.frame]
-            self.rect= self.image.get_rect()
-            self.rect.center= center
+            center = self.rect.center
+            self.image = self.player_anim[self.size][self.frame]
+            self.rect = self.image.get_rect()
+            self.rect.center = center

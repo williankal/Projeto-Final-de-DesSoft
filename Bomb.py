@@ -11,8 +11,8 @@ class Bomb(pygame.sprite.Sprite):
         
         # Carregando a imagem de fundo.
         bomb_img = pygame.image.load(path.join(img_dir, "bomb.png")).convert_alpha()#colocar a imagem da bomba
-        self.image=bomb_img
-        self.image=pygame.transform.scale(bomb_img,(35,35))        
+        self.image = bomb_img
+        self.image = pygame.transform.scale(bomb_img,(35,35))        
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
         

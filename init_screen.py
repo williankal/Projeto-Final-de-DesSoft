@@ -11,7 +11,7 @@ def init_screen(screen):
 
     # Carrega o fundo da tela inicial
     background = pygame.image.load(path.join(img_dir, 'inicio.png')).convert()
-    background=pygame.transform.scale(background,(WIDTH,HEIGHT))
+    background = pygame.transform.scale(background,(WIDTH,HEIGHT))
     background_rect = background.get_rect()
 
     running = True
@@ -46,7 +46,7 @@ def final_screen(screen,hits1,hits2):
 
     # Carrega o fundo da tela inicial
     background = pygame.image.load(path.join(img_dir, 'p1_win.png')).convert()
-    background=pygame.transform.scale(background,(WIDTH,HEIGHT))
+    background = pygame.transform.scale(background,(WIDTH,HEIGHT))
     background_rect = background.get_rect()
 
     running = True
@@ -57,13 +57,13 @@ def final_screen(screen,hits1,hits2):
 
         if hits1:
             background = pygame.image.load(path.join(img_dir, 'p2_win.png')).convert()
-            background=pygame.transform.scale(background,(WIDTH,HEIGHT))
+            background = pygame.transform.scale(background,(WIDTH,HEIGHT))
             state = QUIT
             running = False
 
         if hits2:
             background = pygame.image.load(path.join(img_dir, 'p1_win.png')).convert()
-            background=pygame.transform.scale(background,(WIDTH,HEIGHT))
+            background = pygame.transform.scale(background,(WIDTH,HEIGHT))
             state = GAME
             running = False
                     
